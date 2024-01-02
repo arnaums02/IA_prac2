@@ -224,7 +224,49 @@ def iterative_buildtree(part: Data, scoref=entropy, beta=0):
     """
     t10: Define the iterative version of the function buildtree
     """
-    raise NotImplementedError
+    stack = []
+    root = DecisionNode()
+    stack.append(root, part)
+
+    while len(stack) > 0:
+        node, data = stack.pop()
+
+        if len(data) == 0:
+            continue
+
+        current_score = scoref(data)
+
+        if current_score == 0:
+            results = unique_counts(data)
+
+            if len(results) == 1:
+                node.results = results
+
+            else:
+                node.results = random_voting(results)
+
+            continue
+
+        best_gain, best_criteria, best_sets = search_best_decision(data, scoref)
+
+        if best_gain < beta:
+            results = unique_counts(data)
+            if len(results) == 1:
+                node.results = results
+
+            else:
+                node.results = random_voting(results)
+
+            continue
+
+        node.col = best_criteria[0]
+        node.value = best_criteria[1]
+        node.tb = DecisionNode()
+        node.fb = DecisionNode()
+        stack.append(node.tb, best_sets[0])
+        stack.append(node.fb, best_sets[1])
+
+    return root
 
 
 def classify(tree, values):
