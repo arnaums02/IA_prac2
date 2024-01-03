@@ -273,14 +273,14 @@ def classify(tree, values):
     if tree.results is not None:
         return tree.results
 
-    value = row[tree.col]
+    value = values[tree.col]
 
     if isinstance(value, (int, float)):
         branch = tree.tb if value >= tree.value else tree.fb
     else:
         branch = tree.tb if value == tree.value else tree.fb
 
-    return classify(branch, row)
+    return classify(branch, values)
 
 
 def prune(tree: DecisionNode, threshold: float, impurity=entropy):
