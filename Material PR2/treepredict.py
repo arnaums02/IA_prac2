@@ -283,11 +283,11 @@ def classify(tree, values):
     return classify(branch, values)
 
 
-def branchPruning(tree: DecisionNode, threshold: float, impurity=entropy):
+def prune(tree: DecisionNode, threshold: float, impurity=entropy):
     if tree.tb.results is None:
-        branchPruning(tree.tb, threshold)
+        prune(tree.tb, threshold)
     if tree.fb.results is None:
-        branchPruning(tree.fb, threshold)
+        prune(tree.fb, threshold)
 
     if tree.tb.results is not None and tree.fb.results is not None:
         tb, fb = [], []

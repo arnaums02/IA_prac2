@@ -45,7 +45,7 @@ def cross_validation(dataset, k, agg, seed, scoref, beta=0, threshold=0.0):
         train = [row for j in range(k) if j != i for row in partitions[j]]
         test = partitions[i]
         tree = buildtree(train,scoref,beta)
-        branchPruning(tree, threshold)
+        prune(tree, threshold)
         accuracy.append(get_accuracy(tree, test))
     return agg(accuracy)
 
@@ -80,7 +80,7 @@ def main():
 
     print('Building tree with best threshold')
     tree = buildtree(train, scoref=entropy, beta=0)
-    branchPruning(tree, best_threshold)
+    prune(tree, best_threshold)
 
     test_accuracy = get_accuracy(tree, test)
 
