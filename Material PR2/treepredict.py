@@ -270,8 +270,38 @@ def iterative_buildtree(part: Data, scoref=entropy, beta=0):
 
 
 def classify(tree, values):
-    raise NotImplementedError
+    if tree.results is not None:
+        return tree.results
 
+    value = row[tree.col]
+
+    if isinstance(value, (int, float)):
+        branch = tree.tb if value >= tree.value else tree.fb
+    else:
+        branch = tree.tb if value == tree.value else tree.fb
+
+    return classify(branch, row)
+
+
+def prune(tree: DecisionNode, threshold: float, impurity=entropy):
+    if tree.tb.results is None:
+        prune(tree.tb, threshold)
+    if tree.fb.results is None:
+        prune(tree.fb, threshold)
+
+    if tree.tb.results is not None and tree.fb.results is not None:
+        tb, fb = [], []
+        for v, c in tree.tb.results.items():
+            tb += [[v]] * c
+        for v,c in tree.fb.results.items():
+            fb += [[v]] * c
+
+        p = len(tb) / len(tb + fb)
+        delta = impurity(tb + fb) - p * impurity(tb) - (1 - p) * impurity(fb)
+
+        if delta < threshold:
+            tree.tb, tree.fb = None, None
+            tree.results = unique_counts(tb + fb)
 
 def print_tree(tree, headers=None, indent=""):
     """
