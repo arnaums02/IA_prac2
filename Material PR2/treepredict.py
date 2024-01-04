@@ -187,7 +187,8 @@ def buildtree(part: Data, scoref=entropy, beta=0):
 
 def search_best_decision(part: Data, scoref=entropy):
     """
-    Search for the best decision (best gain, criteria and sets) to make, based on the best gain possible
+    Search for the best decision (best gain, criteria and sets) to make,
+    based on the best gain possible
     """
     best_gain = 0
     best_criteria = None

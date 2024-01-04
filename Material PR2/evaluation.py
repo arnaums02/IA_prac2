@@ -68,7 +68,7 @@ def main():
     accuracies = []
 
     for threshold in thresholds:
-        print(f'Pruning with thresgold {threshold}')
+        print(f'Pruning with threshold {threshold}')
         accuracy = cross_validation(train, k=5, agg=mean, seed=1, scoref=entropy, beta=0, threshold=threshold)
         print(f'Accuracy: {accuracy:.2f}')
         accuracies.append(accuracy)
